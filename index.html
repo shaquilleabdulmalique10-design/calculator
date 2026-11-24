@@ -1,46 +1,200 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>calculator</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="calculator">
-      <!-- display area with small history preview -->
-      <div class="display-wrap">
-        <div class="history-line" id="historyPreview"></div>
-        <input type="text" id="display" readonly placeholder="0" value="0" />
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090b12" />
+  <title>Nova Scientific Suite</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%239b7bff'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' fill='white'%3EN%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <main class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div><strong>Nova</strong><span>Scientific Suite</span></div>
       </div>
+      <nav class="module-nav" aria-label="Calculator modules">
+        <button class="nav-item active" data-module="scientific"><span>∑</span><b>Scientific</b></button>
+        <button class="nav-item" data-module="graph"><span>⌁</span><b>Graph</b></button>
+        <button class="nav-item" data-module="solver"><span>ƒ</span><b>Equations</b></button>
+        <button class="nav-item" data-module="calculus"><span>∫</span><b>Calculus</b></button>
+        <button class="nav-item" data-module="statistics"><span>μ</span><b>Statistics</b></button>
+        <button class="nav-item" data-module="matrix"><span>▦</span><b>Matrix</b></button>
+        <button class="nav-item" data-module="convert"><span>⇄</span><b>Convert</b></button>
+        <button class="nav-item" data-module="physics"><span>⚛</span><b>Physics</b></button>
+      </nav>
+      <button class="nav-item history-toggle" id="historyToggle"><span>◷</span><b>History</b></button>
+    </aside>
 
-      <!-- button grid -->
-      <div class="button-grid">
-        <button class="btn clear" id="clearAll">AC</button>
-        <button class="btn clear" id="backspace">⌫</button>
-        <button class="btn operator" id="percent">%</button>
-        <button class="btn operator" id="divide">÷</button>
+    <section class="main-stage">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="mobileMenu" aria-label="Menu">☰</button>
+        <div><span class="eyebrow">WORKSPACE</span>
+          <h1 id="moduleTitle">Scientific</h1>
+        </div>
+        <div class="top-actions">
+          <label class="precision-control">Precision <select id="precision">
+              <option>6</option>
+              <option>9</option>
+              <option selected>12</option>
+              <option>15</option>
+            </select></label>
+          <button class="icon-button" id="themeToggle" title="Toggle theme">☼</button>
+          <button class="icon-button" id="copyResult" title="Copy result">⧉</button>
+        </div>
+      </header>
 
-        <button class="btn" id="num7">7</button>
-        <button class="btn" id="num8">8</button>
-        <button class="btn" id="num9">9</button>
-        <button class="btn operator" id="multiply">×</button>
+      <div class="workspace">
+        <section class="module-panel active" id="scientific-panel">
+          <div class="calculator-card">
+            <div class="expression-preview" id="historyPreview"></div>
+            <input class="expression-input" id="display" value="0" aria-label="Calculator expression" />
+            <div class="display-status"><button class="angle-toggle active" id="degreeMode">DEG</button><button
+                class="angle-toggle" id="radianMode">RAD</button><span id="memoryIndicator">MEM 0</span></div>
+            <div class="scientific-grid">
+              <button data-action="second">2nd</button><button data-action="sinh">sinh</button><button
+                data-action="cosh">cosh</button><button data-action="tanh">tanh</button><button
+                data-action="clearMemory">MC</button><button data-action="memoryAdd">M+</button>
+              <button data-action="sin">sin</button><button data-action="cos">cos</button><button
+                data-action="tan">tan</button><button data-action="asin">sin⁻¹</button><button
+                data-action="acos">cos⁻¹</button><button data-action="atan">tan⁻¹</button>
+              <button data-action="sqrt">√</button><button data-action="cbrt">∛</button><button
+                data-action="square">x²</button><button data-action="cube">x³</button><button
+                data-action="power">xʸ</button><button data-action="tenPower">10ˣ</button>
+              <button data-action="log">log</button><button data-action="ln">ln</button><button
+                data-action="log2">log₂</button><button data-action="inverse">1/x</button><button
+                data-action="factorial">n!</button><button data-action="percent">%</button>
+              <button data-action="pi">π</button><button data-action="e">e</button><button
+                data-action="openParen">(</button><button data-action="closeParen">)</button><button
+                data-action="abs">|x|</button><button data-action="perm">nPr</button>
+              <button data-action="comb">nCr</button><button data-action="mod">mod</button><button
+                data-action="exp">EXP</button><button data-action="random">Rand</button><button
+                data-action="ans">Ans</button><button data-action="toggleSign">±</button>
+              <button class="num" data-number="7">7</button><button class="num" data-number="8">8</button><button
+                class="num" data-number="9">9</button><button class="operator" data-action="divide">÷</button><button
+                data-action="backspace">⌫</button><button class="danger" data-action="clear">AC</button>
+              <button class="num" data-number="4">4</button><button class="num" data-number="5">5</button><button
+                class="num" data-number="6">6</button><button class="operator" data-action="multiply">×</button><button
+                data-action="memoryRecall">MR</button><button data-action="memorySubtract">M−</button>
+              <button class="num" data-number="1">1</button><button class="num" data-number="2">2</button><button
+                class="num" data-number="3">3</button><button class="operator" data-action="subtract">−</button><button
+                class="equals wide" data-action="equals">=</button><button class="equals-mini"
+                data-action="fraction">a/b</button>
+              <button class="num zero" data-number="0">0</button><button class="num"
+                data-action="decimal">.</button><button class="operator" data-action="add">+</button>
+            </div>
+          </div>
+          <aside class="quick-panel">
+            <h3>Quick tools</h3><button data-tool="constants">Constants library</button><button
+              data-tool="variables">Variables</button><button data-tool="base">Number base</button>
+            <div id="quickOutput">Ready</div>
+          </aside>
+        </section>
 
-        <button class="btn" id="num4">4</button>
-        <button class="btn" id="num5">5</button>
-        <button class="btn" id="num6">6</button>
-        <button class="btn operator" id="subtract">−</button>
+        <section class="module-panel" id="graph-panel"><canvas id="graphCanvas"></canvas>
+          <div class="graph-toolbar"><input id="graphExpression" value="sin(x)" /><button
+              id="addGraph">Plot</button><button id="zoomIn">＋</button><button id="zoomOut">−</button><button
+              id="resetGraph">Reset</button><button id="analyzeGraph">Analyze</button></div>
+          <div id="graphLegend"></div>
+          <div id="graphOutput"></div>
+        </section>
 
-        <button class="btn" id="num1">1</button>
-        <button class="btn" id="num2">2</button>
-        <button class="btn" id="num3">3</button>
-        <button class="btn operator" id="add">+</button>
+        <section class="module-panel" id="solver-panel">
+          <div class="tool-card">
+            <h2>Equation Solver</h2><select id="solverType">
+              <option value="linear">Linear: ax + b = c</option>
+              <option value="quadratic">Quadratic: ax² + bx + c = 0</option>
+              <option value="polynomial">Polynomial coefficients</option>
+              <option value="simultaneous">Simultaneous 2×2</option>
+            </select>
+            <div id="solverFields"></div><button class="primary-button" id="solveEquation">Solve with steps</button>
+            <pre id="solverOutput"></pre>
+          </div>
+        </section>
 
-        <button class="btn zero" id="num0">0</button>
-        <button class="btn" id="decimal">.</button>
-        <button class="btn equals" id="equals">=</button>
+        <section class="module-panel" id="calculus-panel">
+          <div class="tool-card">
+            <h2>Calculus Studio</h2><label>Function f(x)</label><input id="calcExpression" value="x^2 * sin(x)" />
+            <div class="two-column">
+              <div><select id="calculusType">
+                  <option value="derivative">Derivative at x</option>
+                  <option value="integral">Numerical integral</option>
+                  <option value="limit">Limit x → a</option>
+                </select><input id="calcA" value="1" placeholder="x or a" /><input id="calcB" value="3"
+                  placeholder="Upper bound" /></div><button class="primary-button" id="runCalculus">Calculate</button>
+            </div>
+            <pre id="calculusOutput"></pre>
+          </div>
+        </section>
+
+        <section class="module-panel" id="statistics-panel">
+          <div class="tool-card">
+            <h2>Statistics & Probability</h2><textarea id="statsInput"
+              placeholder="Enter numbers: 12, 18, 22, 22, 30"></textarea>
+            <div class="button-row"><button id="runStats">Analyze</button><label>n <input id="permN" type="number"
+                  value="10"></label><label>k <input id="permK" type="number" value="3"></label><button
+                id="runProbability">nPr / nCr</button></div>
+            <pre id="statsOutput"></pre>
+          </div>
+        </section>
+
+        <section class="module-panel" id="matrix-panel">
+          <div class="tool-card">
+            <h2>Matrix Calculator</h2>
+            <div class="matrix-builder"><textarea id="matrixA" placeholder="Matrix A: 1,2;3,4">1,2;3,4</textarea><select
+                id="matrixOperation">
+                <option value="det">det(A)</option>
+                <option value="transpose">Aᵀ</option>
+                <option value="inverse">A⁻¹</option>
+                <option value="multiply">A × B</option>
+                <option value="eigen">Eigenvalues</option>
+              </select><textarea id="matrixB" placeholder="Matrix B: 5,6;7,8">5,6;7,8</textarea></div><button
+              class="primary-button" id="runMatrix">Compute</button>
+            <pre id="matrixOutput"></pre>
+          </div>
+        </section>
+
+        <section class="module-panel" id="convert-panel">
+          <div class="tool-card">
+            <h2>Unit Converter</h2>
+            <div class="converter-row"><select id="conversionCategory"></select><input id="conversionValue"
+                type="number" value="1"><select id="conversionFrom"></select><span>→</span><select
+                id="conversionTo"></select></div><button class="primary-button" id="runConversion">Convert</button>
+            <div class="result-large" id="conversionOutput">—</div>
+          </div>
+        </section>
+
+        <section class="module-panel" id="physics-panel">
+          <div class="tool-card">
+            <h2>Physics Calculator</h2><select id="physicsFormula">
+              <option value="force">Force: F = ma</option>
+              <option value="kinetic">Kinetic energy: ½mv²</option>
+              <option value="ohm">Voltage: V = IR</option>
+              <option value="density">Density: ρ = m/V</option>
+              <option value="wave">Wave speed: v = fλ</option>
+            </select>
+            <div id="physicsFields"></div><button class="primary-button" id="runPhysics">Calculate</button>
+            <pre id="physicsOutput"></pre>
+          </div>
+        </section>
       </div>
-    </div>
-    <script src="script.JS"></script>
-  </body>
+    </section>
+
+    <aside class="history-drawer" id="historyDrawer">
+      <div class="drawer-head">
+        <h2>History</h2><button id="closeHistory">×</button>
+      </div><input id="historySearch" placeholder="Search calculations" />
+      <div id="historyList"></div><button class="clear-history" id="clearHistory">Clear history</button>
+    </aside>
+  </main>
+  <script src="script.js"></script>
+</body>
+
 </html>
