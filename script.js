@@ -1401,7 +1401,6 @@ class MathParser {
 
     try {
       let html = '';
-      let html = '';
       if (op === 'derivative') {
         // Adaptive step size based on input magnitude for better numerical stability
         const h = Math.max(1e-7, Math.abs(a) * 1e-9 + 1e-7);
