@@ -1910,12 +1910,21 @@
   $('#convSwapBtn')?.addEventListener('click', () => {
     const fromSel = $('#convFromUnit');
     const toSel   = $('#convToUnit');
-    if (!fromSel || !toSel) return;
+    const fromInput = $('#convFrom');
+    const toOutput = $('#convTo');
+    if (!fromSel || !toSel || !fromInput || !toOutput) return;
+    
+    // Swap unit selectors
     const tmp = fromSel.value;
     fromSel.value = toSel.value;
     toSel.value = tmp;
-    const tmpV = $('#convFrom').value;
-    $('#convFrom').value = $('#convTo').value;
+    
+    // Transfer converted value to input
+    const convertedText = toOutput.textContent?.trim();
+    if (convertedText && !convertedText.includes('Enter')) {
+      fromInput.value = convertedText.replace(/[^\d.-]/g, '');
+    }
+    
     runConversion();
   });
 
@@ -2155,9 +2164,13 @@
   /* ═══════════════════════════════════════════
      RESIZE / VISIBILITY HANDLERS
   ═══════════════════════════════════════════ */
+  let resizeTimer;
   window.addEventListener('resize', () => {
-    if ($('#panel-graphing')?.classList.contains('active')) drawGraph();
-    if ($('#panel-statistics')?.classList.contains('active')) drawStatsChart();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if ($('#panel-graphing')?.classList.contains('active')) drawGraph();
+      if ($('#panel-statistics')?.classList.contains('active')) drawStatsChart();
+    }, 150);
   });
 
   // Re-draw when switching to graph/stats panel
@@ -2189,10 +2202,7 @@
     if (!e.ctrlKey && !e.metaKey && !e.altKey) {
       const idx = panelKeys.indexOf(e.key);
       if (idx !== -1 && !e.target.matches('input,textarea,select')) {
-        // Only if no calc panel is active or it's not a number being typed
-        if ($('.panel.active')?.id !== 'panel-scientific') {
-          switchPanel(panels[idx]);
-        }
+        switchPanel(panels[idx]);
       }
     }
   });
@@ -2347,10 +2357,8 @@
   });
 
   // Restore home active state when history/settings close
-  const origCloseHistory = closeHistory;
-  // wrap closeHistory to restore nav
   const _closeHistoryOrig = closeHistory;
-  window._nexusCloseHistory = () => {
+  closeHistory = () => {
     _closeHistoryOrig();
     if (window.innerWidth <= 680) {
       $$('.mobile-nav-item').forEach(b => b.classList.remove('active'));
@@ -2648,7 +2656,7 @@
     const panels = ['scientific','graphing','solver','calculus','statistics','matrix','converter','physics'];
     if (!e.ctrlKey && !e.metaKey && !e.altKey) {
       const idx = panelKeys.indexOf(e.key);
-      if (idx !== -1 && $('.panel.active')?.id !== 'panel-scientific') {
+      if (idx !== -1 && !e.target.matches('input,textarea,select')) {
         switchPanel(panels[idx]);
       }
     }
