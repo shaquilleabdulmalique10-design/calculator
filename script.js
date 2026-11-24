@@ -405,6 +405,7 @@ class MathParser {
      THEME
   ═══════════════════════════════════════════ */
   function applyTheme(theme) {
+    console.log('Applying theme:', theme);
     state.theme = theme;
     document.documentElement.dataset.theme = theme;
     $('#darkThemeBtn')?.classList.toggle('active', theme === 'dark');
@@ -584,7 +585,7 @@ class MathParser {
       case 'backspace':      calcBack(); break;
       case 'equals':         calcCalculate(); break;
       case 'decimal':        calcAppend('.'); break;
-      case 'add':            calcAppend('+'); break;
+      case 'add':            console.log('ADD button clicked, appending +'); calcAppend('+'); break;
       case 'subtract':       calcAppend('-'); break;
       case 'multiply':       calcAppend('×'); break;
       case 'divide':         calcAppend('÷'); break;
@@ -601,7 +602,13 @@ class MathParser {
       case 'fraction':       calcAppend('/'); break;
       case 'random':         calcAppend(fmt(Math.random())); break;
       case 'sci-notation':   calcAppend('×10^'); break;
-      case 'memoryClear':    state.memory = 0; updateDisplay(); break;
+      case 'memoryClear':
+        state.memory = 0;
+        updateDisplay();
+        // Explicitly ensure M indicator is removed
+        const memInd = $('#memoryIndicator');
+        if (memInd) memInd.classList.remove('active');
+        break;
       case 'memoryRecall':   calcAppend(fmt(state.memory)); break;
       case 'memoryAdd':
         try { state.memory += evaluate(state.expression || '0'); updateDisplay(); showToast('Added to memory'); }
@@ -1105,26 +1112,26 @@ class MathParser {
       if (!eq.trim()) return;
       const roots = [];
       let prevY = null;
-      for (let x = -20; x <= 20; x += 0.05) {
+      for (let x = -20; x <= 20; x += 0.01) {
         try {
           const y = evaluate(eq.replace(/\bx\b/g, `(${x})`));
           if (prevY !== null && prevY * y < 0) {
             const root = x - 0.025;
-            if (!roots.some(r => Math.abs(r - root) < 0.1)) roots.push(fmt(root, 4));
+            if (!roots.some(r => Math.abs(r - root) < 0.02)) roots.push(fmt(root, 4));
           }
           prevY = y;
         } catch (_) { prevY = null; }
       }
       // Local extrema
       let extrema = [];
-      for (let x = -20; x <= 20; x += 0.1) {
+      for (let x = -20; x <= 20; x += 0.02) {
         try {
-          const h = 0.001;
+          const h = 0.0005;
           const f1 = evaluate(eq.replace(/\bx\b/g, `(${x-h})`));
           const f2 = evaluate(eq.replace(/\bx\b/g, `(${x})`));
           const f3 = evaluate(eq.replace(/\bx\b/g, `(${x+h})`));
           if ((f1 < f2 && f2 > f3) || (f1 > f2 && f2 < f3)) {
-            if (!extrema.some(e => Math.abs(e.x - x) < 0.2)) {
+            if (!extrema.some(e => Math.abs(e.x - x) < 0.05)) {
               extrema.push({ x: fmt(x, 4), y: fmt(f2, 4), type: f1 < f2 ? 'max' : 'min' });
             }
           }
@@ -1394,21 +1401,32 @@ class MathParser {
 
     try {
       let html = '';
+      let html = '';
       if (op === 'derivative') {
-        const h = 1e-7;
+        // Adaptive step size based on input magnitude for better numerical stability
+        const h = Math.max(1e-7, Math.abs(a) * 1e-9 + 1e-7);
+        
+        // First derivative using central difference
         const deriv = (f(a + h) - f(a - h)) / (2 * h);
-        // Second derivative for context
-        const d2 = (f(a + h) - 2*f(a) + f(a - h)) / (h * h);
+        
+        // Second derivative with DEG mode chain rule compensation
+        let d2 = (f(a + h) - 2*f(a) + f(a - h)) / (h * h);
+        
+        // Apply chain rule factor for DEG mode: (π/180)^2 for second derivative
+        if (state.angle === 'DEG') {
+          const degToRadFactor = Math.PI / 180;
+          d2 *= degToRadFactor * degToRadFactor;
+        }
+        
         html = `
-          <div class="result-label">Numerical derivative using central difference (h = ${h})</div>
+          <div class="result-label">Numerical derivative using central difference (h = ${fmt(h)})</div>
           <div class="result-highlight">f′(${a}) ≈ ${fmt(deriv)}</div>
-          <div class="result-label" style="margin-top:10px">Second derivative</div>
+          <div class="result-label" style="margin-top:10px">Second derivative ${state.angle === 'DEG' ? '(DEG mode compensated)' : ''}</div>
           <div class="result-value">f″(${a}) ≈ ${fmt(d2)}</div>
           <div class="result-label" style="margin-top:10px">Function value</div>
           <div class="result-value">f(${a}) = ${fmt(f(a))}</div>`;
         historyAdd(`f′(${a}) of ${fnSrc}`, fmt(deriv), 'Calculus');
       }
-
       else if (op === 'integral') {
         if (a >= b) throw new Error('Lower bound must be less than upper bound');
         const n = 10000;
