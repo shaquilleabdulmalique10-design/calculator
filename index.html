@@ -1,200 +1,949 @@
 <!doctype html>
-<html lang="en">
-
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#090b12" />
-  <title>Nova Scientific Suite</title>
-  <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%239b7bff'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' fill='white'%3EN%3C/text%3E%3C/svg%3E" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#060810" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>NEXUS — Scientific Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%23f97316'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='16' font-weight='800' fill='white'%3EN%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
-  <main class="app-shell">
-    <aside class="sidebar">
+
+  <!-- ═══ AMBIENT GLOW ORBS (behind all glass layers) ═══ -->
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <div class="app-shell" id="appShell">
+
+    <!-- ═══════════════════════════════════
+         SIDEBAR (desktop)
+    ═══════════════════════════════════ -->
+    <aside class="sidebar" id="sidebar">
       <div class="brand">
-        <div class="brand-mark">N</div>
-        <div><strong>Nova</strong><span>Scientific Suite</span></div>
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M3 19L8.5 3L11 11L13.5 7L19 19"
+              stroke="url(#brandGrad)" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="brandGrad" x1="3" y1="11" x2="19" y2="11" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#a78bfa"/><stop offset="1" stop-color="#fb923c"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <strong>NEXUS</strong>
+          <span>Scientific Calculator</span>
+        </div>
       </div>
-      <nav class="module-nav" aria-label="Calculator modules">
-        <button class="nav-item active" data-module="scientific"><span>∑</span><b>Scientific</b></button>
-        <button class="nav-item" data-module="graph"><span>⌁</span><b>Graph</b></button>
-        <button class="nav-item" data-module="solver"><span>ƒ</span><b>Equations</b></button>
-        <button class="nav-item" data-module="calculus"><span>∫</span><b>Calculus</b></button>
-        <button class="nav-item" data-module="statistics"><span>μ</span><b>Statistics</b></button>
-        <button class="nav-item" data-module="matrix"><span>▦</span><b>Matrix</b></button>
-        <button class="nav-item" data-module="convert"><span>⇄</span><b>Convert</b></button>
-        <button class="nav-item" data-module="physics"><span>⚛</span><b>Physics</b></button>
+
+      <nav class="side-nav" aria-label="Calculator modules">
+        <button class="nav-btn active" data-panel="scientific">
+          <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+          <span class="nav-label">Calculator</span>
+        </button>
+        <button class="nav-btn" data-panel="graphing">
+          <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+          <span class="nav-label">Graphing</span>
+        </button>
+        <button class="nav-btn" data-panel="solver">
+          <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg></span>
+          <span class="nav-label">Equation Solver</span>
+        </button>
+        <button class="nav-btn" data-panel="calculus">
+          <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 20c0-4 2-6 6-6s6 2 6 6"/><path d="M6 4c0 4 2 6 6 6s6-2 6-6"/></svg></span>
+          <span class="nav-label">Calculus</span>
+        </button>
+        <button class="nav-btn" data-panel="statistics">
+          <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+          <span class="nav-label">Statistics</span>
+        </button>
+        <button class="nav-btn" data-panel="matrix">
+          <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span>
+          <span class="nav-label">Matrix</span>
+        </button>
+        <button class="nav-btn" data-panel="converter">
+          <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></span>
+          <span class="nav-label">Unit Converter</span>
+        </button>
+        <button class="nav-btn" data-panel="physics">
+          <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>
+          <span class="nav-label">Physics</span>
+        </button>
       </nav>
-      <button class="nav-item history-toggle" id="historyToggle"><span>◷</span><b>History</b></button>
+
+      <div class="sidebar-footer">
+        <button class="history-btn" id="historyToggleBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>History</span>
+          <span class="history-badge" id="historyBadge">0</span>
+        </button>
+        <p class="sidebar-motto">Compute. Explore. Discover.<br><span>∞</span></p>
+      </div>
     </aside>
 
-    <section class="main-stage">
+    <!-- ═══════════════════════════════════
+         MAIN AREA
+    ═══════════════════════════════════ -->
+    <main class="main-area">
+
+      <!-- ── TOP BAR ── -->
       <header class="topbar">
-        <button class="icon-button mobile-menu" id="mobileMenu" aria-label="Menu">☰</button>
-        <div><span class="eyebrow">WORKSPACE</span>
-          <h1 id="moduleTitle">Scientific</h1>
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <!-- Desktop: brand in topbar not needed — mobile: show NEXUS brand -->
+          <div class="mobile-brand">
+            <div class="brand-logo" style="width:28px;height:28px;border-radius:8px;">
+              <svg width="16" height="16" viewBox="0 0 22 22" fill="none">
+                <path d="M3 19L8.5 3L11 11L13.5 7L19 19" stroke="url(#topBrandGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs><linearGradient id="topBrandGrad" x1="3" y1="11" x2="19" y2="11" gradientUnits="userSpaceOnUse"><stop stop-color="#a78bfa"/><stop offset="1" stop-color="#fb923c"/></linearGradient></defs>
+              </svg>
+            </div>
+            <div class="brand-text"><strong>NEXUS</strong><span>Scientific Calculator</span></div>
+          </div>
+          <div class="module-selector" id="moduleSelector">
+            <span class="module-selector-icon" id="moduleSelectorIcon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>
+            </span>
+            <span id="moduleSelectorLabel">Scientific Calculator</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
         </div>
-        <div class="top-actions">
-          <label class="precision-control">Precision <select id="precision">
-              <option>6</option>
-              <option>9</option>
-              <option selected>12</option>
-              <option>15</option>
-            </select></label>
-          <button class="icon-button" id="themeToggle" title="Toggle theme">☼</button>
-          <button class="icon-button" id="copyResult" title="Copy result">⧉</button>
+
+        <div class="topbar-right">
+          <!-- Mobile angle mode pill (matches image.jpeg top right) -->
+          <div class="mobile-angle-group">
+            <button class="angle-pill active" id="degBtn2" style="height:28px;padding:0 10px;font-size:11px;">Deg</button>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-3)"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <!-- Desktop theme toggle -->
+          <div class="theme-toggle-group desktop-only">
+            <button class="theme-btn active" id="darkThemeBtn" data-theme="dark">Dark</button>
+            <button class="theme-btn" id="lightThemeBtn" data-theme="light">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Light
+            </button>
+          </div>
+          <!-- Mobile moon/theme icon -->
+          <button class="topbar-icon-btn mobile-theme-btn" id="mobileThemeBtn" title="Toggle theme" aria-label="Toggle theme">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          </button>
+          <button class="topbar-icon-btn" id="settingsBtn" title="Settings" aria-label="Settings">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          </button>
+          <button class="topbar-icon-btn desktop-only" id="fullscreenBtn" title="Fullscreen" aria-label="Fullscreen">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </button>
+          <button class="pro-badge desktop-only" id="proBadgeBtn" aria-label="Subscription status">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span id="proBadgeLabel">Upgrade</span>
+          </button>
         </div>
       </header>
 
-      <div class="workspace">
-        <section class="module-panel active" id="scientific-panel">
-          <div class="calculator-card">
-            <div class="expression-preview" id="historyPreview"></div>
-            <input class="expression-input" id="display" value="0" aria-label="Calculator expression" />
-            <div class="display-status"><button class="angle-toggle active" id="degreeMode">DEG</button><button
-                class="angle-toggle" id="radianMode">RAD</button><span id="memoryIndicator">MEM 0</span></div>
-            <div class="scientific-grid">
-              <button data-action="second">2nd</button><button data-action="sinh">sinh</button><button
-                data-action="cosh">cosh</button><button data-action="tanh">tanh</button><button
-                data-action="clearMemory">MC</button><button data-action="memoryAdd">M+</button>
-              <button data-action="sin">sin</button><button data-action="cos">cos</button><button
-                data-action="tan">tan</button><button data-action="asin">sin⁻¹</button><button
-                data-action="acos">cos⁻¹</button><button data-action="atan">tan⁻¹</button>
-              <button data-action="sqrt">√</button><button data-action="cbrt">∛</button><button
-                data-action="square">x²</button><button data-action="cube">x³</button><button
-                data-action="power">xʸ</button><button data-action="tenPower">10ˣ</button>
-              <button data-action="log">log</button><button data-action="ln">ln</button><button
-                data-action="log2">log₂</button><button data-action="inverse">1/x</button><button
-                data-action="factorial">n!</button><button data-action="percent">%</button>
-              <button data-action="pi">π</button><button data-action="e">e</button><button
-                data-action="openParen">(</button><button data-action="closeParen">)</button><button
-                data-action="abs">|x|</button><button data-action="perm">nPr</button>
-              <button data-action="comb">nCr</button><button data-action="mod">mod</button><button
-                data-action="exp">EXP</button><button data-action="random">Rand</button><button
-                data-action="ans">Ans</button><button data-action="toggleSign">±</button>
-              <button class="num" data-number="7">7</button><button class="num" data-number="8">8</button><button
-                class="num" data-number="9">9</button><button class="operator" data-action="divide">÷</button><button
-                data-action="backspace">⌫</button><button class="danger" data-action="clear">AC</button>
-              <button class="num" data-number="4">4</button><button class="num" data-number="5">5</button><button
-                class="num" data-number="6">6</button><button class="operator" data-action="multiply">×</button><button
-                data-action="memoryRecall">MR</button><button data-action="memorySubtract">M−</button>
-              <button class="num" data-number="1">1</button><button class="num" data-number="2">2</button><button
-                class="num" data-number="3">3</button><button class="operator" data-action="subtract">−</button><button
-                class="equals wide" data-action="equals">=</button><button class="equals-mini"
-                data-action="fraction">a/b</button>
-              <button class="num zero" data-number="0">0</button><button class="num"
-                data-action="decimal">.</button><button class="operator" data-action="add">+</button>
-            </div>
-          </div>
-          <aside class="quick-panel">
-            <h3>Quick tools</h3><button data-tool="constants">Constants library</button><button
-              data-tool="variables">Variables</button><button data-tool="base">Number base</button>
-            <div id="quickOutput">Ready</div>
-          </aside>
-        </section>
-
-        <section class="module-panel" id="graph-panel"><canvas id="graphCanvas"></canvas>
-          <div class="graph-toolbar"><input id="graphExpression" value="sin(x)" /><button
-              id="addGraph">Plot</button><button id="zoomIn">＋</button><button id="zoomOut">−</button><button
-              id="resetGraph">Reset</button><button id="analyzeGraph">Analyze</button></div>
-          <div id="graphLegend"></div>
-          <div id="graphOutput"></div>
-        </section>
-
-        <section class="module-panel" id="solver-panel">
-          <div class="tool-card">
-            <h2>Equation Solver</h2><select id="solverType">
-              <option value="linear">Linear: ax + b = c</option>
-              <option value="quadratic">Quadratic: ax² + bx + c = 0</option>
-              <option value="polynomial">Polynomial coefficients</option>
-              <option value="simultaneous">Simultaneous 2×2</option>
-            </select>
-            <div id="solverFields"></div><button class="primary-button" id="solveEquation">Solve with steps</button>
-            <pre id="solverOutput"></pre>
-          </div>
-        </section>
-
-        <section class="module-panel" id="calculus-panel">
-          <div class="tool-card">
-            <h2>Calculus Studio</h2><label>Function f(x)</label><input id="calcExpression" value="x^2 * sin(x)" />
-            <div class="two-column">
-              <div><select id="calculusType">
-                  <option value="derivative">Derivative at x</option>
-                  <option value="integral">Numerical integral</option>
-                  <option value="limit">Limit x → a</option>
-                </select><input id="calcA" value="1" placeholder="x or a" /><input id="calcB" value="3"
-                  placeholder="Upper bound" /></div><button class="primary-button" id="runCalculus">Calculate</button>
-            </div>
-            <pre id="calculusOutput"></pre>
-          </div>
-        </section>
-
-        <section class="module-panel" id="statistics-panel">
-          <div class="tool-card">
-            <h2>Statistics & Probability</h2><textarea id="statsInput"
-              placeholder="Enter numbers: 12, 18, 22, 22, 30"></textarea>
-            <div class="button-row"><button id="runStats">Analyze</button><label>n <input id="permN" type="number"
-                  value="10"></label><label>k <input id="permK" type="number" value="3"></label><button
-                id="runProbability">nPr / nCr</button></div>
-            <pre id="statsOutput"></pre>
-          </div>
-        </section>
-
-        <section class="module-panel" id="matrix-panel">
-          <div class="tool-card">
-            <h2>Matrix Calculator</h2>
-            <div class="matrix-builder"><textarea id="matrixA" placeholder="Matrix A: 1,2;3,4">1,2;3,4</textarea><select
-                id="matrixOperation">
-                <option value="det">det(A)</option>
-                <option value="transpose">Aᵀ</option>
-                <option value="inverse">A⁻¹</option>
-                <option value="multiply">A × B</option>
-                <option value="eigen">Eigenvalues</option>
-              </select><textarea id="matrixB" placeholder="Matrix B: 5,6;7,8">5,6;7,8</textarea></div><button
-              class="primary-button" id="runMatrix">Compute</button>
-            <pre id="matrixOutput"></pre>
-          </div>
-        </section>
-
-        <section class="module-panel" id="convert-panel">
-          <div class="tool-card">
-            <h2>Unit Converter</h2>
-            <div class="converter-row"><select id="conversionCategory"></select><input id="conversionValue"
-                type="number" value="1"><select id="conversionFrom"></select><span>→</span><select
-                id="conversionTo"></select></div><button class="primary-button" id="runConversion">Convert</button>
-            <div class="result-large" id="conversionOutput">—</div>
-          </div>
-        </section>
-
-        <section class="module-panel" id="physics-panel">
-          <div class="tool-card">
-            <h2>Physics Calculator</h2><select id="physicsFormula">
-              <option value="force">Force: F = ma</option>
-              <option value="kinetic">Kinetic energy: ½mv²</option>
-              <option value="ohm">Voltage: V = IR</option>
-              <option value="density">Density: ρ = m/V</option>
-              <option value="wave">Wave speed: v = fλ</option>
-            </select>
-            <div id="physicsFields"></div><button class="primary-button" id="runPhysics">Calculate</button>
-            <pre id="physicsOutput"></pre>
-          </div>
-        </section>
+      <!-- ── MOBILE HORIZONTAL MODULE TAB BAR (image.jpeg style) ── -->
+      <div class="mobile-tab-bar" id="mobileTabBar" role="tablist" aria-label="Calculator modules">
+        <button class="mobile-tab-btn active" data-panel="scientific" role="tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>
+          Calc
+        </button>
+        <button class="mobile-tab-btn" data-panel="graphing" role="tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Graph
+        </button>
+        <button class="mobile-tab-btn" data-panel="solver" role="tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+          Solver
+        </button>
+        <button class="mobile-tab-btn" data-panel="calculus" role="tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 20c0-4 2-6 6-6s6 2 6 6"/><path d="M6 4c0 4 2 6 6 6s6-2 6-6"/></svg>
+          Calculus
+        </button>
+        <button class="mobile-tab-btn" data-panel="statistics" role="tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Stats
+        </button>
+        <button class="mobile-tab-btn" data-panel="matrix" role="tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Matrix
+        </button>
+        <button class="mobile-tab-btn" data-panel="converter" role="tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+          Convert
+        </button>
+        <button class="mobile-tab-btn" data-panel="physics" role="tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          Physics
+        </button>
       </div>
-    </section>
 
-    <aside class="history-drawer" id="historyDrawer">
-      <div class="drawer-head">
-        <h2>History</h2><button id="closeHistory">×</button>
-      </div><input id="historySearch" placeholder="Search calculations" />
-      <div id="historyList"></div><button class="clear-history" id="clearHistory">Clear history</button>
+      <!-- ── PANEL WRAPPER ── -->
+      <div class="panels-wrapper">
+
+        <!-- ═══════════════════════════════════
+             SCIENTIFIC CALCULATOR
+        ═══════════════════════════════════ -->
+        <section class="panel active" id="panel-scientific" role="tabpanel">
+          <div class="sci-layout">
+            <div class="calc-column">
+
+              <!-- Glass Display Card -->
+              <div class="calc-display-card">
+                <div class="display-topbar">
+                  <button class="angle-pill active" id="degBtn" aria-pressed="true">DEG</button>
+                  <button class="angle-pill" id="radBtn" aria-pressed="false">RAD</button>
+                  <div class="display-topbar-right">
+                    <span class="mem-indicator" id="memIndicator" aria-label="Memory">M</span>
+                  </div>
+                </div>
+                <div class="display-expression" id="displayExpression" aria-live="polite" aria-label="Expression"></div>
+                <div class="display-result" id="displayResult" aria-live="assertive" aria-label="Result">0</div>
+                <div class="display-secondary" id="displaySecondary"></div>
+              </div>
+
+              <!-- Button Grid -->
+              <div class="calc-buttons" role="group" aria-label="Calculator buttons">
+
+                <!-- Row 1: Memory -->
+                <button class="cb cb-fn" data-action="memoryClear" aria-label="Memory clear">MC</button>
+                <button class="cb cb-fn" data-action="memoryRecall" aria-label="Memory recall">MR</button>
+                <button class="cb cb-fn" data-action="memoryAdd" aria-label="Memory add">M+</button>
+                <button class="cb cb-fn" data-action="memorySubtract" aria-label="Memory subtract">M−</button>
+                <button class="cb cb-clear" data-action="clear" aria-label="Clear">C</button>
+                <button class="cb cb-back" data-action="backspace" aria-label="Backspace">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+                </button>
+
+                <!-- Row 2: Trig -->
+                <button class="cb cb-sci" data-action="sin">sin</button>
+                <button class="cb cb-sci" data-action="cos">cos</button>
+                <button class="cb cb-sci" data-action="tan">tan</button>
+                <button class="cb cb-sci" data-action="log">log</button>
+                <button class="cb cb-sci" data-action="ln">ln</button>
+                <button class="cb cb-sci" data-action="log2">log₂</button>
+
+                <!-- Row 3: Inverse trig -->
+                <button class="cb cb-sci" data-action="asin">sin⁻¹</button>
+                <button class="cb cb-sci" data-action="acos">cos⁻¹</button>
+                <button class="cb cb-sci" data-action="atan">tan⁻¹</button>
+                <button class="cb cb-sci" data-action="sqrt">√</button>
+                <button class="cb cb-sci" data-action="cbrt">∛</button>
+                <button class="cb cb-sci" data-action="tenPower">10ˣ</button>
+
+                <!-- Row 4: Powers -->
+                <button class="cb cb-sci" data-action="square">x²</button>
+                <button class="cb cb-sci" data-action="cube">x³</button>
+                <button class="cb cb-sci" data-action="power">xʸ</button>
+                <button class="cb cb-sci" data-action="factorial">n!</button>
+                <button class="cb cb-sci" data-action="pi">π</button>
+                <button class="cb cb-sci" data-action="e">e</button>
+
+                <!-- Row 5: Hyperbolic -->
+                <button class="cb cb-sci" data-action="sinh">sinh</button>
+                <button class="cb cb-sci" data-action="cosh">cosh</button>
+                <button class="cb cb-sci" data-action="tanh">tanh</button>
+                <button class="cb cb-sci" data-action="abs">|x|</button>
+                <button class="cb cb-sci" data-action="perm">nPr</button>
+                <button class="cb cb-sci" data-action="comb">nCr</button>
+
+                <!-- Row 6: Parens / Operators -->
+                <button class="cb cb-paren" data-action="openParen">(</button>
+                <button class="cb cb-paren" data-action="closeParen">)</button>
+                <button class="cb cb-sci" data-action="percent">%</button>
+                <button class="cb cb-op" data-action="divide">÷</button>
+                <button class="cb cb-op" data-action="multiply">×</button>
+                <button class="cb cb-sci" data-action="mod">mod</button>
+
+                <!-- Row 7: 7 8 9 -->
+                <button class="cb cb-num" data-number="7">7</button>
+                <button class="cb cb-num" data-number="8">8</button>
+                <button class="cb cb-num" data-number="9">9</button>
+                <button class="cb cb-op" data-action="subtract">−</button>
+                <button class="cb cb-sci" data-action="inverse">1/x</button>
+                <button class="cb cb-sci" data-action="ans">Ans</button>
+
+                <!-- Row 8: 4 5 6 -->
+                <button class="cb cb-num" data-number="4">4</button>
+                <button class="cb cb-num" data-number="5">5</button>
+                <button class="cb cb-num" data-number="6">6</button>
+                <button class="cb cb-op" data-action="add">+</button>
+                <button class="cb cb-sci" data-action="random">Rand</button>
+                <button class="cb cb-sci" data-action="exp">EXP</button>
+
+                <!-- Row 9: 1 2 3 = -->
+                <button class="cb cb-num" data-number="1">1</button>
+                <button class="cb cb-num" data-number="2">2</button>
+                <button class="cb cb-num" data-number="3">3</button>
+                <button class="cb cb-equals" data-action="equals" style="grid-row: span 2" aria-label="Equals">=</button>
+                <button class="cb cb-sci" data-action="toggleSign">±</button>
+                <button class="cb cb-sci" data-action="fraction">a/b</button>
+
+                <!-- Row 10: 0 . sci-notation -->
+                <button class="cb cb-num cb-zero" data-number="0">0</button>
+                <button class="cb cb-num" data-action="decimal">.</button>
+                <button class="cb cb-sci" data-action="sci-notation">×10ⁿ</button>
+              </div>
+
+              <!-- Mobile-only extras below keypad -->
+
+              <!-- Graph Preview Card (mobile, matches image.jpeg) -->
+              <div class="mobile-graph-preview" id="mobileGraphPreview">
+                <div class="mobile-graph-preview-header">
+                  <span class="mobile-graph-preview-label">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Graph Preview
+                  </span>
+                  <button class="mobile-graph-view-all" id="mobileGraphViewAllBtn">View All →</button>
+                </div>
+                <canvas id="mobileGraphCanvas"></canvas>
+                <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:6px;">
+                  <span style="font-size:10px;color:var(--text-3);font-family:'JetBrains Mono',monospace;">
+                    <span style="display:inline-block;width:8px;height:2px;background:#a78bfa;margin-right:4px;vertical-align:middle;border-radius:1px;"></span>y = sin(x)
+                  </span>
+                  <span style="font-size:10px;color:var(--text-3);font-family:'JetBrains Mono',monospace;">
+                    <span style="display:inline-block;width:8px;height:2px;background:#fb923c;margin-right:4px;vertical-align:middle;border-radius:1px;"></span>y = cos(x)
+                  </span>
+                </div>
+              </div>
+
+              <!-- Mini cards row: Equation Solver + Unit Converter (image.jpeg) -->
+              <div class="mobile-mini-cards" id="mobileMiniCards">
+                <div class="mobile-mini-card" id="miniSolverCard" role="button" tabindex="0" aria-label="Go to Equation Solver">
+                  <div class="mmc-label">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg>
+                    Equation Solver
+                  </div>
+                  <div class="mmc-eq">x² − 5x + 6 = 0</div>
+                  <div class="mmc-result">x = 2, x = 3</div>
+                  <span class="mmc-arrow">→</span>
+                </div>
+                <div class="mobile-mini-card" id="miniConverterCard" role="button" tabindex="0" aria-label="Go to Unit Converter">
+                  <div class="mmc-label">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+                    Unit Converter
+                  </div>
+                  <div class="mmc-eq">100 km/h =</div>
+                  <div class="mmc-result" id="miniConverterResult">27.78 m/s</div>
+                  <span class="mmc-arrow">→</span>
+                </div>
+              </div>
+
+              <!-- Mobile history mini card (image.jpeg) -->
+              <div class="mobile-history-card" id="mobileHistoryCard">
+                <div class="mobile-history-header">
+                  <span class="mobile-history-label">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    History
+                  </span>
+                  <button class="mobile-history-clear" id="mobileHistoryClearBtn">
+                    Clear
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:3px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                  </button>
+                </div>
+                <div id="mobileHistoryEntries">
+                  <div class="mobile-history-entry" style="color:var(--text-3);">No calculations yet</div>
+                </div>
+              </div>
+
+            </div><!-- end calc-column -->
+
+            <!-- Desktop History Side Panel -->
+            <div class="sci-history-panel">
+              <div class="sci-history-header">
+                <span class="panel-label">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  History
+                </span>
+                <button class="clear-mini-btn" id="clearHistoryMiniBtn">Clear</button>
+              </div>
+              <div class="sci-history-list" id="sciHistoryList">
+                <div class="history-empty">No calculations yet</div>
+              </div>
+            </div>
+
+          </div><!-- end sci-layout -->
+        </section>
+
+        <!-- ═══════════════════════════════════
+             GRAPHING
+        ═══════════════════════════════════ -->
+        <section class="panel" id="panel-graphing" role="tabpanel">
+          <div class="graph-layout">
+            <div class="graph-toolbar">
+              <div class="graph-eq-inputs" id="graphEqInputs">
+                <div class="graph-eq-row">
+                  <span class="eq-color-dot" style="background:#a78bfa"></span>
+                  <input class="graph-input" value="sin(x)" placeholder="f(x) = …" data-eq-index="0" />
+                  <button class="eq-remove-btn" data-remove="0">×</button>
+                </div>
+              </div>
+              <div class="graph-actions">
+                <button class="graph-action-btn" id="addEqBtn">+ Add Function</button>
+                <button class="graph-action-btn" id="graphZoomInBtn">Zoom +</button>
+                <button class="graph-action-btn" id="graphZoomOutBtn">Zoom −</button>
+                <button class="graph-action-btn" id="graphResetBtn">Reset</button>
+                <button class="graph-action-btn accent" id="graphAnalyzeBtn">Analyze</button>
+              </div>
+            </div>
+            <div class="graph-canvas-wrap">
+              <canvas id="graphCanvas"></canvas>
+              <div class="graph-legend" id="graphLegend"></div>
+              <div class="graph-crosshair-info" id="graphCrosshairInfo"></div>
+            </div>
+            <div class="graph-analysis-bar" id="graphAnalysisBar"></div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════
+             EQUATION SOLVER
+        ═══════════════════════════════════ -->
+        <section class="panel" id="panel-solver" role="tabpanel">
+          <div class="tool-layout">
+            <div class="tool-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+              <h2>Equation Solver</h2>
+            </div>
+            <div class="tool-controls">
+              <div class="control-group">
+                <label class="ctrl-label">Type</label>
+                <select class="styled-select" id="solverType">
+                  <option value="linear">Linear  ax + b = c</option>
+                  <option value="quadratic" selected>Quadratic  ax² + bx + c = 0</option>
+                  <option value="polynomial">Polynomial (coefficients)</option>
+                  <option value="simultaneous">Simultaneous 2×2</option>
+                  <option value="cubic">Cubic  ax³ + bx² + cx + d = 0</option>
+                </select>
+              </div>
+              <div id="solverInputs" class="solver-inputs"></div>
+              <button class="accent-btn" id="solveBtn">
+                Solve
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+            <div class="result-card" id="solverResult">
+              <div class="result-placeholder">Enter equation coefficients and press Solve</div>
+            </div>
+            <div class="steps-card" id="solverSteps" style="display:none">
+              <div class="steps-header">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Step-by-step solution
+              </div>
+              <div id="solverStepsContent"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════
+             CALCULUS
+        ═══════════════════════════════════ -->
+        <section class="panel" id="panel-calculus" role="tabpanel">
+          <div class="tool-layout">
+            <div class="tool-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 20c0-4 2-6 6-6s6 2 6 6"/><path d="M6 4c0 4 2 6 6 6s6-2 6-6"/></svg>
+              <h2>Calculus Studio</h2>
+            </div>
+            <div class="tool-controls">
+              <div class="control-group">
+                <label class="ctrl-label">Operation</label>
+                <select class="styled-select" id="calculusOp">
+                  <option value="derivative">Derivative  f′(x) at a point</option>
+                  <option value="integral">Definite Integral  ∫[a,b] f(x)dx</option>
+                  <option value="limit">Limit  lim(x→a) f(x)</option>
+                  <option value="taylor">Taylor Series (around x=0)</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label class="ctrl-label">Function f(x)</label>
+                <input class="styled-input" id="calcFn" value="x^2 * sin(x)" placeholder="e.g. x^2 + 3*x - 1" />
+              </div>
+              <div class="control-row">
+                <div class="control-group">
+                  <label class="ctrl-label" id="calcALabel">Point a</label>
+                  <input class="styled-input" id="calcA" value="1" type="number" step="any" />
+                </div>
+                <div class="control-group" id="calcBGroup">
+                  <label class="ctrl-label">Upper bound b</label>
+                  <input class="styled-input" id="calcB" value="3" type="number" step="any" />
+                </div>
+              </div>
+              <button class="accent-btn" id="runCalculusBtn">Calculate</button>
+            </div>
+            <div class="result-card" id="calculusResult">
+              <div class="result-placeholder">Select an operation and press Calculate</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════
+             STATISTICS
+        ═══════════════════════════════════ -->
+        <section class="panel" id="panel-statistics" role="tabpanel">
+          <div class="tool-layout stats-layout">
+            <div class="tool-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              <h2>Statistics &amp; Probability</h2>
+            </div>
+            <div class="stats-columns">
+              <div class="stats-left">
+                <div class="control-group">
+                  <label class="ctrl-label">Data (comma or space separated)</label>
+                  <textarea class="styled-textarea" id="statsData" rows="4" placeholder="e.g. 2, 4, 4, 4, 5, 5, 7, 9">1, 2, 3, 4, 5, 6, 7, 8, 9, 10</textarea>
+                </div>
+                <button class="accent-btn" id="runStatsBtn">Analyze</button>
+                <div class="result-card" id="statsResult">
+                  <div class="result-placeholder">Enter data and press Analyze</div>
+                </div>
+                <div class="prob-section">
+                  <div class="prob-header">Combinatorics</div>
+                  <div class="control-row">
+                    <div class="control-group">
+                      <label class="ctrl-label">n</label>
+                      <input class="styled-input" id="probN" value="10" type="number" min="0" />
+                    </div>
+                    <div class="control-group">
+                      <label class="ctrl-label">r</label>
+                      <input class="styled-input" id="probR" value="3" type="number" min="0" />
+                    </div>
+                  </div>
+                  <button class="accent-btn secondary" id="runProbBtn">Compute nPr &amp; nCr</button>
+                  <div class="result-card" id="probResult" style="display:none"></div>
+                </div>
+              </div>
+              <div class="stats-right">
+                <div class="chart-label">Distribution Chart</div>
+                <canvas id="statsChart" height="220"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════
+             MATRIX
+        ═══════════════════════════════════ -->
+        <section class="panel" id="panel-matrix" role="tabpanel">
+          <div class="tool-layout">
+            <div class="tool-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              <h2>Matrix Calculator</h2>
+            </div>
+            <div class="matrix-layout">
+              <div class="matrix-side">
+                <label class="ctrl-label">Matrix A <span class="hint">(rows with semicolons, e.g. 1,2;3,4)</span></label>
+                <textarea class="styled-textarea matrix-textarea" id="matA" rows="4">1,2;3,4</textarea>
+              </div>
+              <div class="matrix-op-col">
+                <select class="styled-select" id="matOp">
+                  <option value="det">det(A)</option>
+                  <option value="transpose">Aᵀ (transpose)</option>
+                  <option value="inverse">A⁻¹ (inverse)</option>
+                  <option value="rank">rank(A)</option>
+                  <option value="trace">trace(A)</option>
+                  <option value="add">A + B</option>
+                  <option value="subtract">A − B</option>
+                  <option value="multiply">A × B</option>
+                  <option value="eigen">Eigenvalues (2×2)</option>
+                </select>
+                <button class="accent-btn" id="runMatBtn">Compute</button>
+              </div>
+              <div class="matrix-side" id="matBWrap">
+                <label class="ctrl-label">Matrix B</label>
+                <textarea class="styled-textarea matrix-textarea" id="matB" rows="4">5,6;7,8</textarea>
+              </div>
+            </div>
+            <div class="result-card" id="matResult">
+              <div class="result-placeholder">Enter matrix and press Compute</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════
+             UNIT CONVERTER
+        ═══════════════════════════════════ -->
+        <section class="panel" id="panel-converter" role="tabpanel">
+          <div class="tool-layout">
+            <div class="tool-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+              <h2>Unit Converter</h2>
+            </div>
+            <div class="tool-controls">
+              <div class="control-group">
+                <label class="ctrl-label">Category</label>
+                <select class="styled-select" id="convCategory"></select>
+              </div>
+              <div class="converter-row">
+                <div class="conv-input-group">
+                  <input class="styled-input conv-val-input" id="convFrom" type="number" value="1" />
+                  <select class="styled-select conv-unit-select" id="convFromUnit"></select>
+                </div>
+                <button class="swap-btn" id="convSwapBtn" title="Swap units" aria-label="Swap units">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+                </button>
+                <div class="conv-input-group">
+                  <input class="styled-input conv-val-input" id="convTo" type="number" readonly />
+                  <select class="styled-select conv-unit-select" id="convToUnit"></select>
+                </div>
+              </div>
+              <button class="accent-btn" id="runConvBtn">Convert</button>
+              <div class="result-card conv-result-card" id="convResult">
+                <div class="result-placeholder">Enter value and press Convert</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════
+             PHYSICS
+        ═══════════════════════════════════ -->
+        <section class="panel" id="panel-physics" role="tabpanel">
+          <div class="tool-layout">
+            <div class="tool-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              <h2>Physics Calculator</h2>
+            </div>
+            <div class="tool-controls">
+              <div class="physics-formula-grid" id="physicsFormulaGrid">
+                <!-- Dynamically filled by script.js -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- end panels-wrapper -->
+
+      <!-- ══════════════════════════════════
+           MOBILE BOTTOM NAV (image.jpeg)
+      ══════════════════════════════════ -->
+      <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Main navigation">
+        <button class="mobile-nav-item active" id="mobileNavHome" data-panel="scientific" aria-label="Home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </button>
+        <button class="mobile-nav-item" id="mobileNavTools" data-panel="graphing" aria-label="Tools">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Tools
+        </button>
+        <button class="mobile-nav-center-btn" id="mobileNavCenter" aria-label="Quick action">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </button>
+        <button class="mobile-nav-item" id="mobileNavHistory" aria-label="History">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          History
+        </button>
+        <button class="mobile-nav-item" data-panel-settings="true" id="mobileNavSettings" aria-label="Settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          Settings
+        </button>
+      </nav>
+
+    </main><!-- end main-area -->
+
+    <!-- ═══════════════════════════════════
+         HISTORY DRAWER
+    ═══════════════════════════════════ -->
+    <div class="history-overlay" id="historyOverlay" aria-hidden="true"></div>
+    <aside class="history-drawer" id="historyDrawer" aria-label="Calculation history">
+      <div class="drawer-header">
+        <h3>Calculation History</h3>
+        <button class="drawer-close-btn" id="historyCloseBtn" aria-label="Close history">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="drawer-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="historySearchInput" placeholder="Search history…" aria-label="Search history" />
+      </div>
+      <div class="history-list" id="historyList" role="list"></div>
+      <div class="drawer-footer">
+        <button class="danger-btn" id="clearAllHistoryBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+          Clear all history
+        </button>
+        <button class="secondary-btn" id="exportHistoryBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+      </div>
     </aside>
-  </main>
-  <script src="script.js"></script>
-</body>
 
+    <!-- ═══════════════════════════════════
+         SETTINGS MODAL
+    ═══════════════════════════════════ -->
+    <div class="modal-overlay" id="settingsOverlay" style="display:none" role="dialog" aria-modal="true" aria-label="Settings">
+      <div class="modal-card" id="settingsModal">
+        <div class="modal-header">
+          <h3>Settings</h3>
+          <button class="drawer-close-btn" id="settingsCloseBtn" aria-label="Close settings">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="settings-body">
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Angle Unit</div>
+              <div class="setting-desc">Default for trig functions</div>
+            </div>
+            <div class="toggle-group">
+              <button class="toggle-opt active" id="settingDeg">Degrees</button>
+              <button class="toggle-opt" id="settingRad">Radians</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Scientific Notation</div>
+              <div class="setting-desc">Auto-switch for large/small numbers</div>
+            </div>
+            <label class="switch" aria-label="Scientific notation toggle">
+              <input type="checkbox" id="settingSciNotation" checked />
+              <span class="switch-thumb"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Decimal Precision</div>
+              <div class="setting-desc">Significant figures</div>
+            </div>
+            <select class="styled-select small-select" id="settingPrecision" aria-label="Precision">
+              <option value="4">4</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+              <option value="10" selected>10</option>
+              <option value="12">12</option>
+              <option value="15">15</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Theme</div>
+              <div class="setting-desc">Dark / Light appearance</div>
+            </div>
+            <div class="toggle-group">
+              <button class="toggle-opt active" id="settingDarkTheme">Dark</button>
+              <button class="toggle-opt" id="settingLightTheme">Light</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Custom Variables</div>
+              <div class="setting-desc">Define named constants (e.g. k=1.38e-23)</div>
+            </div>
+            <button class="accent-btn small-btn" id="openVarsBtn">Manage</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         VARIABLES MODAL
+    ═══════════════════════════════════ -->
+    <div class="modal-overlay" id="varsOverlay" style="display:none" role="dialog" aria-modal="true" aria-label="Variables">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Custom Variables</h3>
+          <button class="drawer-close-btn" id="varsCloseBtn" aria-label="Close variables">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="settings-body">
+          <div class="control-row">
+            <input class="styled-input" id="varName" placeholder="name (e.g. k)" style="width:100px" aria-label="Variable name" />
+            <input class="styled-input" id="varValue" placeholder="value" type="number" step="any" aria-label="Variable value" />
+            <button class="accent-btn small-btn" id="addVarBtn">Add</button>
+          </div>
+          <div id="varsList" style="margin-top:12px" role="list"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end app-shell -->
+
+  <!-- ── TOAST ── -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- ════════════════════════════════════════════════════════
+       NEXUS PRO — PRICING MODAL
+  ════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay pro-modal-overlay" id="pricingModal" style="display:none" role="dialog" aria-modal="true" aria-label="NEXUS Pro Subscription">
+    <div class="pro-modal-card" id="pricingModalCard">
+
+      <button class="pro-modal-close" id="pricingModalClose" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="pro-modal-header">
+        <div class="pro-crown-wrap" aria-hidden="true">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="url(#crownGradM)">
+            <path d="M2 20h20M5 20L3 8l5 4 4-7 4 7 5-4-2 12H5z"/>
+            <defs><linearGradient id="crownGradM" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs>
+          </svg>
+        </div>
+        <h2 class="pro-modal-title">Unlock <span>NEXUS Pro</span></h2>
+        <p class="pro-modal-subtitle">The complete scientific computing suite. No limits, no restrictions.</p>
+        <div class="billing-toggle-wrap">
+          <span class="billing-label" id="billLabelMonthly">Monthly</span>
+          <label class="billing-switch" aria-label="Toggle billing period">
+            <input type="checkbox" id="billingToggle" />
+            <span class="billing-track"><span class="billing-thumb"></span></span>
+          </label>
+          <span class="billing-label" id="billLabelYearly">Yearly</span>
+          <span class="billing-save-pill" id="billingSavePill">Save ₦10,000</span>
+        </div>
+      </div>
+
+      <div class="pricing-cards-row">
+
+        <div class="pricing-card pricing-card-free">
+          <div class="pricing-card-header">
+            <div class="plan-icon plan-icon-free">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div><div class="plan-name">Free</div><div class="plan-desc">Essential tools</div></div>
+          </div>
+          <div class="plan-price">
+            <span class="price-currency">₦</span><span class="price-amount">0</span><span class="price-period">/ forever</span>
+          </div>
+          <ul class="plan-features">
+            <li class="feat-yes">Scientific calculator</li>
+            <li class="feat-yes">Basic graphing (1 function)</li>
+            <li class="feat-yes">Basic equation solving</li>
+            <li class="feat-yes">Standard unit converter</li>
+            <li class="feat-yes">Basic statistics</li>
+            <li class="feat-yes">Basic physics tools</li>
+            <li class="feat-no">History limited to 10 entries</li>
+            <li class="feat-no">Step-by-step solutions</li>
+            <li class="feat-no">Advanced calculus tools</li>
+            <li class="feat-no">Full matrix operations</li>
+            <li class="feat-no">PDF / CSV export</li>
+            <li class="feat-no">Multiple workspaces</li>
+          </ul>
+          <button class="plan-btn plan-btn-free" id="freePlanBtn">Current Plan</button>
+        </div>
+
+        <div class="pricing-card pricing-card-pro">
+          <div class="pricing-card-popular">Most Popular</div>
+          <div class="pricing-card-header">
+            <div class="plan-icon plan-icon-pro">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="url(#planCrownGrad)">
+                <path d="M2 20h20M5 20L3 8l5 4 4-7 4 7 5-4-2 12H5z"/>
+                <defs><linearGradient id="planCrownGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs>
+              </svg>
+            </div>
+            <div><div class="plan-name plan-name-pro">Pro</div><div class="plan-desc">Everything unlocked</div></div>
+          </div>
+          <div class="plan-price">
+            <span class="price-currency">₦</span><span class="price-amount" id="proPriceAmount">2,500</span><span class="price-period" id="proPricePeriod">/ month</span>
+          </div>
+          <div class="price-yearly-note" id="priceYearlyNote" style="display:none">
+            Billed as ₦20,000/year &middot; <strong>₦10,000 saved</strong>
+          </div>
+          <ul class="plan-features">
+            <li class="feat-yes feat-pro">Advanced interactive graphing</li>
+            <li class="feat-yes feat-pro">Multiple simultaneous graphs (6)</li>
+            <li class="feat-yes feat-pro">Step-by-step solutions</li>
+            <li class="feat-yes feat-pro">Advanced calculus &amp; integration</li>
+            <li class="feat-yes feat-pro">Full matrix &amp; linear algebra</li>
+            <li class="feat-yes feat-pro">Advanced statistics &amp; probability</li>
+            <li class="feat-yes feat-pro">Extended physics calculator</li>
+            <li class="feat-yes feat-pro">Unlimited history</li>
+            <li class="feat-yes feat-pro">Multiple workspaces</li>
+            <li class="feat-yes feat-pro">PDF &amp; CSV export</li>
+            <li class="feat-yes feat-pro">Advanced precision controls</li>
+            <li class="feat-yes feat-pro">Exclusive Pro themes</li>
+          </ul>
+          <button class="plan-btn plan-btn-pro" id="proPlanBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 20h20M5 20L3 8l5 4 4-7 4 7 5-4-2 12H5z"/></svg>
+            Activate Pro &mdash; Demo
+          </button>
+          <p class="plan-btn-note">Simulated demo &middot; no real payment</p>
+        </div>
+
+      </div>
+
+      <div class="feature-table-wrap">
+        <button class="feature-table-toggle" id="featureTableToggle">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="ftToggleIcon"><polyline points="6 9 12 15 18 9"/></svg>
+          Compare all features
+        </button>
+        <div class="feature-table" id="featureTable" style="display:none">
+          <div class="ft-header"><span>Feature</span><span>Free</span><span>Pro</span></div>
+          <div class="ft-row"><span>Scientific calculator</span><span class="ft-yes">✓</span><span class="ft-yes">✓</span></div>
+          <div class="ft-row ft-row-alt"><span>Graphing</span><span class="ft-partial">1 function</span><span class="ft-yes">Up to 6</span></div>
+          <div class="ft-row"><span>Equation solving</span><span class="ft-partial">Basic</span><span class="ft-yes">Advanced</span></div>
+          <div class="ft-row ft-row-alt"><span>Step-by-step solutions</span><span class="ft-no">✗</span><span class="ft-yes">✓</span></div>
+          <div class="ft-row"><span>Calculus tools</span><span class="ft-partial">Basic</span><span class="ft-yes">Full suite</span></div>
+          <div class="ft-row ft-row-alt"><span>Matrix operations</span><span class="ft-partial">det, transpose</span><span class="ft-yes">All 9 ops</span></div>
+          <div class="ft-row"><span>Statistics</span><span class="ft-partial">Descriptive</span><span class="ft-yes">Full + distributions</span></div>
+          <div class="ft-row ft-row-alt"><span>Physics formulas</span><span class="ft-partial">4 formulas</span><span class="ft-yes">12 formulas</span></div>
+          <div class="ft-row"><span>History entries</span><span class="ft-no">10 max</span><span class="ft-yes">Unlimited</span></div>
+          <div class="ft-row ft-row-alt"><span>PDF / CSV export</span><span class="ft-no">✗</span><span class="ft-yes">✓</span></div>
+          <div class="ft-row"><span>Workspaces</span><span class="ft-no">1</span><span class="ft-yes">Multiple</span></div>
+          <div class="ft-row ft-row-alt"><span>Exclusive Pro themes</span><span class="ft-no">✗</span><span class="ft-yes">✓</span></div>
+        </div>
+      </div>
+
+      <p class="pro-disclaimer">
+        ⓘ This is a frontend demo only. No real payment is processed. Pro status is stored locally in your browser.
+      </p>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       NEXUS PRO — STATUS / MANAGE MODAL
+  ════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay pro-modal-overlay" id="proStatusModal" style="display:none" role="dialog" aria-modal="true" aria-label="Pro Status">
+    <div class="pro-modal-card pro-status-card">
+      <button class="pro-modal-close" id="proStatusClose" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div id="proStatusContent"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       NEXUS PRO — LOCKED FEATURE PROMPT
+  ════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay pro-modal-overlay" id="lockedModal" style="display:none" role="dialog" aria-modal="true" aria-label="Pro feature required">
+    <div class="pro-modal-card locked-modal-card">
+      <button class="pro-modal-close" id="lockedModalClose" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="locked-modal-body">
+        <div class="locked-icon-wrap" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="url(#lockGradM)" stroke-width="1.6">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+            <defs><linearGradient id="lockGradM" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs>
+          </svg>
+        </div>
+        <h3 class="locked-title" id="lockedFeatureName">Pro Feature</h3>
+        <p class="locked-desc" id="lockedFeatureDesc">This feature is available on the NEXUS Pro plan.</p>
+        <div class="locked-perks">
+          <div class="locked-perk"><span class="perk-dot"></span>Step-by-step solutions</div>
+          <div class="locked-perk"><span class="perk-dot"></span>Unlimited history</div>
+          <div class="locked-perk"><span class="perk-dot"></span>Advanced tools</div>
+        </div>
+        <div class="locked-actions">
+          <button class="plan-btn plan-btn-pro locked-upgrade-btn" id="lockedUpgradeBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 20h20M5 20L3 8l5 4 4-7 4 7 5-4-2 12H5z"/></svg>
+            Upgrade to Pro
+          </button>
+          <button class="locked-dismiss-btn" id="lockedDismissBtn">Maybe later</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="pro.js"></script>
+</body>
 </html>
