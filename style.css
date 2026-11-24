@@ -88,6 +88,11 @@
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
+
+/* Prevent double-tap zoom globally */
+body {
+  touch-action: pan-x pan-y;
+}
 body {
   font-family: 'Inter', system-ui, sans-serif;
   background: var(--bg-mesh);
@@ -570,7 +575,8 @@ input[type=number] { -moz-appearance: textfield; }
 }
 
 /* Base button — glass surface */
-.cb {
+.cb {  touch-action: manipulation;
+  
   height: 46px;
   border-radius: var(--radius);
   font-size: 12px; font-weight: 600;
@@ -1516,11 +1522,13 @@ input[type=number] { -moz-appearance: textfield; }
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 10px 10px 0;
+    padding-bottom: max(100px, env(safe-area-inset-bottom, 0px) + 90px); /* Clear bottom nav + extra space */
   }
 
   /* ── SCIENTIFIC CALCULATOR: Fixed display + scrollable keypad ── */
   #panel-scientific {
     padding: 10px 10px 0;
+    padding-bottom: max(110px, env(safe-area-inset-bottom, 0px) + 100px); /* Extra space for bottom nav + safe area */
   }
 
   .sci-layout {
@@ -1581,6 +1589,7 @@ input[type=number] { -moz-appearance: textfield; }
     gap: 5px;
     flex-shrink: 0; /* Don't compress buttons */
     margin-bottom: 8px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 0px)); /* Ensure buttons clear bottom nav */
   }
 
   .cb {
@@ -1670,6 +1679,29 @@ input[type=number] { -moz-appearance: textfield; }
 
   /* ── MOBILE BOTTOM NAV ── */
   .mobile-bottom-nav { display: flex; grid-row: 3; flex-shrink: 0; }
+
+  /* ── TOUCH-ACTION: Prevent double-tap zoom on interactive elements ── */
+  button,
+  .cb,
+  .mobile-nav-item,
+  .mobile-tab-btn,
+  .nav-btn,
+  .history-item,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+
+  /* ── Ensure calc-buttons has enough bottom clearance ── */
+  .calc-column {
+    padding-bottom: 0;
+  }
+
+  /* ── Add extra bottom spacing for mobile graph preview and mini cards ── */
+  .mobile-history-card:last-child {
+    margin-bottom: max(20px, env(safe-area-inset-bottom, 0px) + 10px);
+  }
 
   /* ── HISTORY DRAWER ── */
   .history-drawer {
