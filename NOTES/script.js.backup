@@ -86,7 +86,35 @@
   /* ═══════════════════════════════════════════
      MATH PARSER  (recursive-descent, no eval)
   ═══════════════════════════════════════════ */
-  class MathParser {
+  
+  /* ── Expression Sanitization ── */
+  function sanitizeExpression(expr) {
+    if (!expr) return '';
+    
+    // Remove any characters that are definitely not part of valid math expressions
+    // Keep: digits, operators, letters (for functions/constants), parens, decimal point
+    // Remove: colons, semicolons (except in matrix context), and other invalid chars
+    
+    // First, check for common invalid patterns
+    if (/[:]/.test(expr)) {
+      // If expression contains colons, it's likely a copy-paste error (e.g., from time stamps)
+      console.warn('Expression contains invalid colon character:', expr);
+      // Try to salvage by removing everything after the first colon
+      expr = expr.split(':')[0];
+    }
+    
+    // Remove any control characters or unusual unicode
+    expr = expr.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+    
+    // Allow valid math characters only
+    // Valid: 0-9 a-z A-Z + - * / ^ ( ) . , space × ÷ − π √ ∛
+    const validChars = /[0-9a-zA-Z+\-*/^().,\s×÷−π√∛_|%!=<>]/g;
+    const cleaned = expr.match(validChars);
+    
+    return cleaned ? cleaned.join('') : expr;
+  }
+
+class MathParser {
     constructor(src, vars = {}) {
       // Normalise operators
       this.src = src
@@ -462,29 +490,47 @@
     const src = state.expression;
     if (!src) return;
     try {
-      const result = evaluate(src);
+      // Sanitize input before evaluation
+      const sanitized = sanitizeExpression(src);
+      
+      // Warn if sanitization changed the expression
+      if (sanitized !== src) {
+        console.warn('Expression was sanitized from:', src, 'to:', sanitized);
+        showToast('Expression was cleaned before calculation');
+      }
+      
+      const result = evaluate(sanitized);
       if (!isFinite(result) && isNaN(result)) throw new Error('Not a number');
       const r = fmt(result);
-      dispExpr.textContent = src + ' =';
+      dispExpr.textContent = sanitized + ' =';
       dispSec.textContent = '';
       state.expression = r;
       state.answer = result;
       state.justCalc = true;
-      historyAdd(src, r, 'Scientific');
+      historyAdd(sanitized, r, 'Scientific');
       updateDisplay();
     } catch (err) {
       dispExpr.textContent = src;
-      state.expression = 'Error: ' + err.message;
+      // Provide more helpful error messages
+      let userMessage = err.message;
+      if (err.message.includes('Unexpected character')) {
+        const char = err.message.match(/[":'](.)[":']/)
+        if (char) {
+          userMessage = `Invalid character '${char[1]}' in expression. Please check your input.`;
+        }
+      }
+      state.expression = 'Error: ' + userMessage;
       state.justCalc = true;
       updateDisplay();
-      showToast(err.message);
+      showToast(userMessage);
     }
   }
 
   function calcUnary(fn) {
     const src = state.expression || '0';
     try {
-      const v = evaluate(src);
+      const sanitized = sanitizeExpression(src);
+      const v = evaluate(sanitized);
       let result, label;
       switch (fn) {
         case 'square':    result = v * v;        label = `(${fmt(v)})²`; break;
@@ -676,8 +722,9 @@
     $$('.history-item', list).forEach(btn => {
       btn.addEventListener('click', () => {
         const h = state.history[Number(btn.dataset.idx)];
-        if (!h) return;
-        state.expression = h.expr;
+        if (!h || !h.expr) return;
+        // Sanitize historical expression (defensive programming)
+        state.expression = sanitizeExpression(h.expr);
         state.justCalc = false;
         dispExpr.textContent = '';
         updateDisplay();
@@ -1910,12 +1957,21 @@
   $('#convSwapBtn')?.addEventListener('click', () => {
     const fromSel = $('#convFromUnit');
     const toSel   = $('#convToUnit');
-    if (!fromSel || !toSel) return;
+    const fromInput = $('#convFrom');
+    const toOutput = $('#convTo');
+    if (!fromSel || !toSel || !fromInput || !toOutput) return;
+    
+    // Swap unit selectors
     const tmp = fromSel.value;
     fromSel.value = toSel.value;
     toSel.value = tmp;
-    const tmpV = $('#convFrom').value;
-    $('#convFrom').value = $('#convTo').value;
+    
+    // Transfer converted value to input
+    const convertedText = toOutput.textContent?.trim();
+    if (convertedText && !convertedText.includes('Enter')) {
+      fromInput.value = convertedText.replace(/[^\d.-]/g, '');
+    }
+    
     runConversion();
   });
 
@@ -2155,9 +2211,13 @@
   /* ═══════════════════════════════════════════
      RESIZE / VISIBILITY HANDLERS
   ═══════════════════════════════════════════ */
+  let resizeTimer;
   window.addEventListener('resize', () => {
-    if ($('#panel-graphing')?.classList.contains('active')) drawGraph();
-    if ($('#panel-statistics')?.classList.contains('active')) drawStatsChart();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if ($('#panel-graphing')?.classList.contains('active')) drawGraph();
+      if ($('#panel-statistics')?.classList.contains('active')) drawStatsChart();
+    }, 150);
   });
 
   // Re-draw when switching to graph/stats panel
@@ -2189,10 +2249,7 @@
     if (!e.ctrlKey && !e.metaKey && !e.altKey) {
       const idx = panelKeys.indexOf(e.key);
       if (idx !== -1 && !e.target.matches('input,textarea,select')) {
-        // Only if no calc panel is active or it's not a number being typed
-        if ($('.panel.active')?.id !== 'panel-scientific') {
-          switchPanel(panels[idx]);
-        }
+        switchPanel(panels[idx]);
       }
     }
   });
@@ -2347,10 +2404,8 @@
   });
 
   // Restore home active state when history/settings close
-  const origCloseHistory = closeHistory;
-  // wrap closeHistory to restore nav
   const _closeHistoryOrig = closeHistory;
-  window._nexusCloseHistory = () => {
+  closeHistory = () => {
     _closeHistoryOrig();
     if (window.innerWidth <= 680) {
       $$('.mobile-nav-item').forEach(b => b.classList.remove('active'));
@@ -2648,7 +2703,7 @@
     const panels = ['scientific','graphing','solver','calculus','statistics','matrix','converter','physics'];
     if (!e.ctrlKey && !e.metaKey && !e.altKey) {
       const idx = panelKeys.indexOf(e.key);
-      if (idx !== -1 && $('.panel.active')?.id !== 'panel-scientific') {
+      if (idx !== -1 && !e.target.matches('input,textarea,select')) {
         switchPanel(panels[idx]);
       }
     }
