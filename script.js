@@ -86,7 +86,35 @@
   /* ═══════════════════════════════════════════
      MATH PARSER  (recursive-descent, no eval)
   ═══════════════════════════════════════════ */
-  class MathParser {
+  
+  /* ── Expression Sanitization ── */
+  function sanitizeExpression(expr) {
+    if (!expr) return '';
+    
+    // Remove any characters that are definitely not part of valid math expressions
+    // Keep: digits, operators, letters (for functions/constants), parens, decimal point
+    // Remove: colons, semicolons (except in matrix context), and other invalid chars
+    
+    // First, check for common invalid patterns
+    if (/[:]/.test(expr)) {
+      // If expression contains colons, it's likely a copy-paste error (e.g., from time stamps)
+      console.warn('Expression contains invalid colon character:', expr);
+      // Try to salvage by removing everything after the first colon
+      expr = expr.split(':')[0];
+    }
+    
+    // Remove any control characters or unusual unicode
+    expr = expr.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+    
+    // Allow valid math characters only
+    // Valid: 0-9 a-z A-Z + - * / ^ ( ) . , space × ÷ − π √ ∛
+    const validChars = /[0-9a-zA-Z+\-*/^().,\s×÷−π√∛_|%!=<>]/g;
+    const cleaned = expr.match(validChars);
+    
+    return cleaned ? cleaned.join('') : expr;
+  }
+
+class MathParser {
     constructor(src, vars = {}) {
       // Normalise operators
       this.src = src
@@ -462,29 +490,47 @@
     const src = state.expression;
     if (!src) return;
     try {
-      const result = evaluate(src);
+      // Sanitize input before evaluation
+      const sanitized = sanitizeExpression(src);
+      
+      // Warn if sanitization changed the expression
+      if (sanitized !== src) {
+        console.warn('Expression was sanitized from:', src, 'to:', sanitized);
+        showToast('Expression was cleaned before calculation');
+      }
+      
+      const result = evaluate(sanitized);
       if (!isFinite(result) && isNaN(result)) throw new Error('Not a number');
       const r = fmt(result);
-      dispExpr.textContent = src + ' =';
+      dispExpr.textContent = sanitized + ' =';
       dispSec.textContent = '';
       state.expression = r;
       state.answer = result;
       state.justCalc = true;
-      historyAdd(src, r, 'Scientific');
+      historyAdd(sanitized, r, 'Scientific');
       updateDisplay();
     } catch (err) {
       dispExpr.textContent = src;
-      state.expression = 'Error: ' + err.message;
+      // Provide more helpful error messages
+      let userMessage = err.message;
+      if (err.message.includes('Unexpected character')) {
+        const char = err.message.match(/[":'](.)[":']/)
+        if (char) {
+          userMessage = `Invalid character '${char[1]}' in expression. Please check your input.`;
+        }
+      }
+      state.expression = 'Error: ' + userMessage;
       state.justCalc = true;
       updateDisplay();
-      showToast(err.message);
+      showToast(userMessage);
     }
   }
 
   function calcUnary(fn) {
     const src = state.expression || '0';
     try {
-      const v = evaluate(src);
+      const sanitized = sanitizeExpression(src);
+      const v = evaluate(sanitized);
       let result, label;
       switch (fn) {
         case 'square':    result = v * v;        label = `(${fmt(v)})²`; break;
@@ -676,8 +722,9 @@
     $$('.history-item', list).forEach(btn => {
       btn.addEventListener('click', () => {
         const h = state.history[Number(btn.dataset.idx)];
-        if (!h) return;
-        state.expression = h.expr;
+        if (!h || !h.expr) return;
+        // Sanitize historical expression (defensive programming)
+        state.expression = sanitizeExpression(h.expr);
         state.justCalc = false;
         dispExpr.textContent = '';
         updateDisplay();
