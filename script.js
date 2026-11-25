@@ -6,6 +6,18 @@
   'use strict';
 
   /* ═══════════════════════════════════════════
+     SECURITY: CALCULATION LIMITS
+  ═══════════════════════════════════════════ */
+  const CALC_LIMITS = {
+    MAX_EXPRESSION_LENGTH: 500,
+    MAX_FACTORIAL: 170,
+    MAX_RECURSION_DEPTH: 100,
+    MAX_CALCULATION_TIME: 5000,
+    MAX_NUMBER: 1e308,
+    MIN_NUMBER: -1e308
+  };
+
+  /* ═══════════════════════════════════════════
      UTILITIES
   ═══════════════════════════════════════════ */
   const $ = (s, root = document) => root.querySelector(s);
@@ -490,6 +502,16 @@ class MathParser {
   function calcCalculate() {
     const src = state.expression;
     if (!src) return;
+    
+    // Security: Check expression length
+    if (src.length > CALC_LIMITS.MAX_EXPRESSION_LENGTH) {
+      showToast(`Expression too long (max ${CALC_LIMITS.MAX_EXPRESSION_LENGTH} characters)`);
+      state.expression = 'Error: Expression too long';
+      state.justCalc = true;
+      updateDisplay();
+      return;
+    }
+    
     try {
       // Sanitize input before evaluation
       const sanitized = sanitizeExpression(src);
@@ -500,7 +522,20 @@ class MathParser {
         showToast('Expression was cleaned before calculation');
       }
       
+      // Security: Add calculation timeout
+      const startTime = Date.now();
       const result = evaluate(sanitized);
+      const calcTime = Date.now() - startTime;
+      
+      if (calcTime > CALC_LIMITS.MAX_CALCULATION_TIME) {
+        throw new Error('Calculation timeout - expression too complex');
+      }
+      
+      // Security: Check result bounds
+      if (Math.abs(result) > CALC_LIMITS.MAX_NUMBER) {
+        throw new Error('Result exceeds maximum number limit');
+      }
+      
       if (!isFinite(result) && isNaN(result)) throw new Error('Not a number');
       const r = fmt(result);
       dispExpr.textContent = sanitized + ' =';
