@@ -1542,15 +1542,15 @@ input[type=number] { -moz-appearance: textfield; }
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 6px;
-    gap: 6px;
+    padding: 4px;
+    gap: 5px;
     overflow: hidden;
   }
 
   /* Display: Compact, fixed at top */
   .calc-display-card {
     flex-shrink: 0;
-    padding: 8px 12px 6px;
+    padding: 6px 10px 5px;
     background: rgba(5, 4, 15, 0.92);
     backdrop-filter: blur(32px) saturate(180%);
     -webkit-backdrop-filter: blur(32px) saturate(180%);
@@ -1599,8 +1599,8 @@ input[type=number] { -moz-appearance: textfield; }
   .cb {
     height: auto;
     aspect-ratio: 1; /* Square buttons that scale */
-    min-height: 36px;
-    max-height: 48px;
+    min-height: 34px;
+    max-height: 52px;
     border-radius: 8px;
     font-size: clamp(9px, 2.5vw, 11px);
     padding: 0;
@@ -1699,7 +1699,11 @@ input[type=number] { -moz-appearance: textfield; }
   .module-selector { display: none; }
 
   /* ── MOBILE TAB BAR ── */
-  .mobile-tab-bar { display: flex; flex-shrink: 0; }
+  .mobile-tab-bar { 
+    display: flex; 
+    flex-shrink: 0;
+    height: 52px; /* Explicit height for proper layout calculation */
+  }
 
   /* ── MOBILE BOTTOM NAV ── */
   .mobile-bottom-nav { display: flex; grid-row: 3; flex-shrink: 0; }
@@ -1749,7 +1753,7 @@ input[type=number] { -moz-appearance: textfield; }
     }
 
     .panels-wrapper {
-      height: calc(100dvh - 54px - env(safe-area-inset-top) - 72px - env(safe-area-inset-bottom));
+      height: calc(100dvh - 54px - env(safe-area-inset-top) - 52px - 72px - env(safe-area-inset-bottom));
     }
 
     .mobile-bottom-nav {
