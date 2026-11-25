@@ -1665,6 +1665,7 @@ input[type=number] { -moz-appearance: textfield; }
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   }
 
+@media (max-width: 680px) {
   .tool-controls {
     flex: 1;
     overflow-y: auto;
@@ -1767,6 +1768,7 @@ input[type=number] { -moz-appearance: textfield; }
   .converter-row { grid-template-columns: 1fr 44px 1fr; }
   .physics-formula-grid { grid-template-columns: 1fr; }
 
+}
 /* ── VERY SMALL SCREENS ── */
 @media (max-width: 380px) {
   .cb { 
