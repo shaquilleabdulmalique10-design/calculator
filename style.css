@@ -1524,10 +1524,10 @@ input[type=number] { -moz-appearance: textfield; }
   }
 
   /* ── SCIENTIFIC CALCULATOR ONLY: Fixed layout, NO scrolling ── */
-  #panel-scientific {
+  #panel-scientific.active {
+    display: flex !important;
     padding: 0;
     overflow: hidden; /* No scrolling on main calculator */
-    display: flex;
     flex-direction: column;
   }
 
