@@ -1523,7 +1523,7 @@ input[type=number] { -moz-appearance: textfield; }
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 10px;
-    padding-bottom: max(90px, env(safe-area-inset-bottom, 0px) + 80px); /* Clear bottom nav */
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 0px) + 24px); /* Minimal gap above bottom nav */
   }
 
   /* ── SCIENTIFIC CALCULATOR ONLY: Fixed layout, NO scrolling ── */
@@ -1648,7 +1648,7 @@ input[type=number] { -moz-appearance: textfield; }
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 16px;
-    padding-bottom: max(90px, env(safe-area-inset-bottom, 0px) + 80px);
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 0px) + 24px);
   }
 
   /* ── STATISTICS PANEL: Scrollable columns ── */
@@ -1672,7 +1672,7 @@ input[type=number] { -moz-appearance: textfield; }
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 16px;
-    padding-bottom: max(90px, env(safe-area-inset-bottom, 0px) + 80px);
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 0px) + 24px);
   }
 
   .stats-left,
@@ -1687,7 +1687,7 @@ input[type=number] { -moz-appearance: textfield; }
     height: 100%;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: max(90px, env(safe-area-inset-bottom, 0px) + 80px);
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 0px) + 24px);
   }
 }
 
@@ -1698,6 +1698,7 @@ input[type=number] { -moz-appearance: textfield; }
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 16px;
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 0px) + 24px);
   }
 
   /* ── SIDEBAR (drawer) ── */
